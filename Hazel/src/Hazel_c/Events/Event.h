@@ -1,8 +1,6 @@
 #pragma once
+#include "hzpch.h"
 #include "Hazel_c/Core.h"
-
-#include <string>
-#include <functional>
 
 namespace Hazel {
 	enum class EventType {
@@ -29,8 +27,9 @@ namespace Hazel {
 #define EVENT_CLASS_CATEGORY(category) virtual int GetCateGoryFlags() const override { return category; }
 
 	class HAZEL_API Event {
-	friend class EventDispatcher;
 	public:
+		bool Handled = false;
+
 		virtual EventType GetEventType() const = 0;
 		virtual const char* GetName() const = 0;
 		virtual int GetCateGoryFlags() const = 0;
@@ -38,9 +37,7 @@ namespace Hazel {
 
 		inline bool IsInCategory(EventCategory category) {
 			return GetCateGoryFlags() & category;
-		}
-	protected:
-		bool m_Handled = false;
+		}	
 	};
 
 	class EventDispatcher
@@ -58,7 +55,7 @@ namespace Hazel {
 		{
 			if (m_Event.GetEventType() == T::GetStaticType())
 			{
-				m_Event.m_Handled = func(*(T*)&m_Event);//先取m_Event的地址，并从event转换成T类型，再解引用这个地址
+				m_Event.Handled = func(*(T*)&m_Event);//先取m_Event的地址，并从event转换成T类型，再解引用这个地址
 				return true;
 			}
 			return false;
