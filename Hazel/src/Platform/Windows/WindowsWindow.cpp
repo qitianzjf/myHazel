@@ -5,7 +5,7 @@
 #include "Hazel_c/Events/MouseEvent.h"
 #include "Hazel_c/Events/KeyEvent.h"
 
-
+#include "glad\glad.h"
 
 namespace Hazel {
 	//Application对象创建WindowsWindow窗口类，窗口类中初始化窗口，并设置窗口事件的回调函数
@@ -46,9 +46,13 @@ namespace Hazel {
 		//在此处创建窗口
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, props.Title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(m_Window);
+
+		int status = gladLoadGLLoader(GLADloadproc(glfwGetProcAddress));
+		HZ_CORE_ASSERT(status, "Failed to initialize GLAD!");
+
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
-
+		
 		//set GLFW callbacks
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
@@ -87,6 +91,13 @@ namespace Hazel {
 					break;
 				}
 			}
+		});
+
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode) {
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+			KeyTypedEvent event(keycode);
+			data.EventCallBack(event);
 		});
 
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods) {

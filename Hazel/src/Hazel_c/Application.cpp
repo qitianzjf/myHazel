@@ -3,16 +3,25 @@
 #include "Application.h"
 
 #include "Log.h"
-
+#include<glad/glad.h>
 #include "GLFW\glfw3.h"
+
+#include "Input.h"
 
 namespace Hazel{
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
+	Application* Application::s_Instance = nullptr;//static成员变量类外定义一次
+
 	Application::Application() {
+		HZ_CORE_ASSERT(!s_Instance, "Application already exists!");
+		s_Instance = this;
+
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallBack(BIND_EVENT_FN(OnEvent));
+
+
 	}
 
 	Application::~Application() {
@@ -21,10 +30,12 @@ namespace Hazel{
 
 	void Application::PushLayer(Layer* layer) {
 		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
 	}
 
 	void Application::PushOverlay(Layer* overlay) {
 		m_LayerStack.PushOverlay(overlay);
+		overlay->OnAttach();
 	}
 
 	void Application::OnEvent(Event& e) {
@@ -51,6 +62,10 @@ namespace Hazel{
 		while (m_Running) {
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
+
+			auto [x, y] = Input::GetMousePos();
+			HZ_CORE_TRACE("{0}, {1}", x, y);
+
 			m_Window->OnUpdate();
 		}
 	}

@@ -27,6 +27,8 @@ namespace Hazel {
 		virtual void SetVSync(bool enabled) = 0;
 		virtual bool IsVSync() const = 0;
 
+		virtual void* GetNaiveWindow() const = 0;//这里不是GLFW的指针，是因为如果不用GLFW窗口而用别的窗口系统，可以很好的转换指针
+
 		static Window* Create(const WindowProps& props = WindowProps());
 	};
 }
