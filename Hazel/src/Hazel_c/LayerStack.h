@@ -20,6 +20,7 @@ namespace Hazel {
 
 	private:
 		std::vector<Layer*> m_Layers;
-		std::vector<Layer*>::iterator m_LayerInsert;
+		unsigned int m_LayerInsertIndex = 0;//m_LayerInsert一直指向容器的开始
+		//不用iterator，因为容器发生变化后，iterator就失效了
 	};
 }

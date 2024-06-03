@@ -21,7 +21,8 @@ namespace Hazel{
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallBack(BIND_EVENT_FN(OnEvent));
 
-
+		m_ImGuiLayer = new ImGuiLayer();
+		PushOverlay(m_ImGuiLayer);
 	}
 
 	Application::~Application() {
@@ -63,8 +64,15 @@ namespace Hazel{
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
 
-			auto [x, y] = Input::GetMousePos();
-			HZ_CORE_TRACE("{0}, {1}", x, y);
+			//auto [x, y] = Input::GetMousePos();
+			//HZ_CORE_TRACE("{0}, {1}", x, y);
+
+			m_ImGuiLayer->Begin();//统一开始新的帧
+			for (Layer* layer : m_LayerStack)
+				//所有的ImGuiRender都包含在一个统一的begin和end之间
+				//每一层都调用对应的imguirender，进行相应的渲染操作
+				layer->OnImGuiRender();
+			m_ImGuiLayer->End();//统一把最后的结果渲染到imgui界面
 
 			m_Window->OnUpdate();
 		}

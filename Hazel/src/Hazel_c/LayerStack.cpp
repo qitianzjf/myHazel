@@ -3,7 +3,7 @@
 
 namespace Hazel {
 	LayerStack::LayerStack() {
-		m_LayerInsert = m_Layers.begin();//m_LayerInsert一直指向容器的开始
+
 	}
 
 	LayerStack::~LayerStack() {
@@ -12,7 +12,8 @@ namespace Hazel {
 	}
 
 	void LayerStack::PushLayer(Layer* layer) {
-		m_LayerInsert = m_Layers.emplace(m_LayerInsert, layer);//在指定位置插入新元素，如插入 1 2 3，vector是 3 2 1
+		m_Layers.emplace(m_Layers.begin() + m_LayerInsertIndex, layer);//在指定位置插入新元素，如插入 1 2 3，vector是 3 2 1
+		m_LayerInsertIndex++;
 	}
 
 	void LayerStack::PushOverlay(Layer* overlay) {
@@ -23,7 +24,7 @@ namespace Hazel {
 		auto it = std::find(m_Layers.begin(), m_Layers.end(), layer);
 		if (it != m_Layers.end()) {
 			m_Layers.erase(it);//erase在移除元素后，返回指向被移除元素之后一个元素的迭代器。
-			--m_LayerInsert;
+			m_LayerInsertIndex--;
 		}
 	}
 

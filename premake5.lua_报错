@@ -11,12 +11,11 @@ workspace "Hazel"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
--- Include directories relative to root folder (solution directory)
+-- 包含相对解决方案的目录
 IncludeDir = {}
 IncludeDir["GLFW"] = "Hazel/vendor/GLFW/include"
 IncludeDir["Glad"] = "Hazel/vendor/Glad/include"
 IncludeDir["ImGui"] = "Hazel/vendor/imgui"
-IncludeDir["glm"] = "Hazel/vendor/glm"
 
 -- 这个include，相当于把glfw下的premake5.lua内容拷贝到这里
 include "Hazel/vendor/GLFW"
@@ -28,7 +27,7 @@ project "Hazel"
 	kind "SharedLib"
 	language "C++"
 	staticruntime "off"
-
+	
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
@@ -38,7 +37,7 @@ project "Hazel"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
 	}
 
 	includedirs
@@ -47,12 +46,11 @@ project "Hazel"
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
-		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.ImGui}"
 	}
 
-	links 
-	{ 
+	links
+	{
 		"GLFW",
 		"Glad",
 		"ImGui",
@@ -62,18 +60,16 @@ project "Hazel"
 	filter "system:windows"
 		cppdialect "C++17"
 		systemversion "latest"
-
-		defines
-		{
+		
+		defines{
 			"HZ_PLATFORM_WINDOWS",
 			"HZ_BUILD_DLL",
 			"_WINDLL",
 			"GLFW_INCLUDE_NONE"
 		}
 
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")	
+		postbuildcommands{
+			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
 		}
 
 	filter "configurations:Debug"
@@ -87,7 +83,7 @@ project "Hazel"
 		optimize "On"
 
 	filter "configurations:Dist"
-		defines "HZ_DIST"
+		defines "HZ_Dist"
 		runtime "Release"
 		optimize "On"
 
@@ -96,35 +92,29 @@ project "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
 	staticruntime "off"
-
+	
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-	files
-	{
+	files{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
 	}
 
-	includedirs
-	{
+	includedirs{
 		"Hazel/vendor/spdlog/include",
-		"Hazel/src",
-		"Hazel/vendor",
-		"%{IncludeDir.glm}"
+		"Hazel/src"
 	}
 
-	links
-	{
+	links{
 		"Hazel"
 	}
 
 	filter "system:windows"
 		cppdialect "C++17"
 		systemversion "latest"
-
-		defines
-		{
+		
+		defines{
 			"HZ_PLATFORM_WINDOWS"
 		}
 
@@ -133,12 +123,12 @@ project "Sandbox"
 		runtime "Debug"
 		symbols "On"
 
-	filter "configurations:Release"
+	filter "configurations:Debug"
 		defines "HZ_RELEASE"
 		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Dist"
-		defines "HZ_DIST"
+		defines "HZ_Dist"
 		runtime "Release"
 		optimize "On"

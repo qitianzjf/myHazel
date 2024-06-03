@@ -4,6 +4,7 @@
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
 #include "LayerStack.h"
+#include "Hazel_c\ImGui\ImGuiLayer.h"
 #include "Window.h"
 #include "Input.h"
 
@@ -28,7 +29,7 @@ namespace Hazel {
 		std::unique_ptr<Window>m_Window;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
-
+		ImGuiLayer* m_ImGuiLayer;//使imguilayer成为Hazel内在部分
 		static Application* s_Instance;//Application持有的单例
 	};
 
