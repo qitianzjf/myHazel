@@ -5,7 +5,7 @@
 #include "Hazel_c/Events/MouseEvent.h"
 #include "Hazel_c/Events/KeyEvent.h"
 
-#include "glad\glad.h"
+#include "Platform\OpenGL\OpenGLContext.h"
 
 namespace Hazel {
 	//Application对象创建WindowsWindow窗口类，窗口类中初始化窗口，并设置窗口事件的回调函数
@@ -45,10 +45,9 @@ namespace Hazel {
 		}
 		//在此处创建窗口
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, props.Title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(m_Window);
-
-		int status = gladLoadGLLoader(GLADloadproc(glfwGetProcAddress));
-		HZ_CORE_ASSERT(status, "Failed to initialize GLAD!");
+		
+		m_Context = new OpenGLContext(m_Window);
+		m_Context->Init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
@@ -120,7 +119,7 @@ namespace Hazel {
 		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset) {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-			MouseScrolledEvent event(xOffset, yOffset);
+			MouseScrolledEvent event((float)xOffset, (float)yOffset);
 			data.EventCallBack(event);
 		});
 
@@ -138,7 +137,7 @@ namespace Hazel {
 
 	void WindowsWindow::OnUpdate() {
 		glfwPollEvents();//监控窗口事件，比如键盘操作、鼠标操作等，然后调用相应的回调函数
-		glfwSwapBuffers(m_Window);
+		m_Context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enabled) {

@@ -51,7 +51,7 @@ namespace Hazel {
 		}
 
 		Application& app = Application::Get();
-		auto window = static_cast<GLFWwindow*>(app.GetWindow().GetNaiveWindow());
+		auto window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 
 		// Setup Platform/Renderer backends
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -74,7 +74,7 @@ namespace Hazel {
 	void ImGuiLayer::End() {
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
-		io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
+		io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), static_cast<float>(app.GetWindow().GetHeight()));
 
 		// Rendering
 		ImGui::Render();
