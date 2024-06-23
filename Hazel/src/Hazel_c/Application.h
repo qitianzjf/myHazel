@@ -8,10 +8,6 @@
 #include "Window.h"
 #include "Input.h"
 
-#include "Renderer\Shader.h"
-#include "Renderer\Buffer.h"
-#include "Renderer\VertexArray.h"
-
 namespace Hazel {
 	class HAZEL_API Application
 	{
@@ -35,12 +31,7 @@ namespace Hazel {
 		LayerStack m_LayerStack;
 		ImGuiLayer* m_ImGuiLayer;//使imguilayer成为Hazel内在部分
 		static Application* s_Instance;//Application持有的单例
-
-		std::shared_ptr<Shader> m_Shader;
-		std::shared_ptr<VertexArray> m_VertexArray;
-
-		std::shared_ptr<Shader> m_BlueShader;
-		std::shared_ptr<VertexArray> m_SquareVA;
+		float m_LastFrameTime = 0.0f;
 	};
 
 	Application* CreateApplication();

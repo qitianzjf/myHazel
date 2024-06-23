@@ -12,16 +12,29 @@
 //EndScene：对收集到的场景数据进行优化
 //Render：按照渲染队列，进行渲染
 #include "RenderCommand.h"
+#include "Renderer\Shader.h"
+
+#include "Renderer\OrthographicCamera.h"
 
 namespace Hazel {
 
 	class Renderer {
 	public:
-		static void BeginScene();
+		static void BeginScene(OrthographicCamera &cam);
 		static void EndScene();
 
-		static void Submit(const std::shared_ptr<VertexArray>& vertexArray);
+		static void Init();
+
+		static void Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, const glm::mat4& transform = glm::mat4(1.0f));
 		
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
+
+	private:
+		struct SceneData
+		{
+			glm::mat4 ViewProjectionMatrix;
+		};
+
+		static SceneData* m_SceneData;
 	};
 }
