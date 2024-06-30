@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "Hazel_c\Core.h"
+#include "Core\Core.h"
 
 namespace Hazel {
 	class Texture {

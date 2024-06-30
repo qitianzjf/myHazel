@@ -1,8 +1,8 @@
 #pragma once
 #include "Core.h"
 
-#include "Events/Event.h"
-#include "Events/ApplicationEvent.h"
+#include "Hazel_c/Events/Event.h"
+#include "Hazel_c/Events/ApplicationEvent.h"
 #include "LayerStack.h"
 #include "Hazel_c\ImGui\ImGuiLayer.h"
 #include "Window.h"
@@ -25,9 +25,11 @@ namespace Hazel {
 		inline static Application& Get() { return *s_Instance; }
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
+		bool OnWindowResize(WindowResizeEvent& e);
 
 		std::unique_ptr<Window>m_Window;
 		bool m_Running = true;
+		bool m_Minimized = false;
 		LayerStack m_LayerStack;
 		ImGuiLayer* m_ImGuiLayer;//使imguilayer成为Hazel内在部分
 		static Application* s_Instance;//Application持有的单例

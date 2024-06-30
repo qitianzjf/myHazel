@@ -1,5 +1,5 @@
 #pragma once
-#include "Hazel_c\Window.h"
+#include "Core\Window.h"
 #include "Renderer\GraphicsContext.h"
 
 #include "GLFW\glfw3.h"

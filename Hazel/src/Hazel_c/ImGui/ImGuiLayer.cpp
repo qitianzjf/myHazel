@@ -5,12 +5,12 @@
 //#include "Hazel_c\ImGui\ImGuiBuild.cpp"
 #include "backends\imgui_impl_opengl3.h"
 #include "backends\imgui_impl_glfw.h"
-#include "Hazel_c\KeyCodes.h"
+#include "Core\KeyCodes.h"
 
 #include "GLFW\glfw3.h"
 //#include "glad\glad.h"
 
-#include "Hazel_c\Application.h"
+#include "Core\Application.h"
 
 
 namespace Hazel {

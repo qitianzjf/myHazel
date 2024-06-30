@@ -20,9 +20,17 @@ namespace Hazel {
 		std::string source = ReadFile(filepath);
 		auto shaderSrc = PreProcess(source);
 		Compile(shaderSrc);
+
+		//从文件地址提取名称
+		auto lastSlash = filepath.find_last_of("/\\");
+		lastSlash = (lastSlash == std::string::npos ? 0 : lastSlash + 1);//判断地址是否就是名称，如地址就是一个Texture.glsl，没有斜杠
+		auto lashDot = filepath.rfind('.');
+		auto count = (lashDot == std::string::npos ? filepath.size() - lastSlash : lashDot - lastSlash);
+		m_Name = filepath.substr(lastSlash, count);
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc)
+	OpenGLShader::OpenGLShader(const std::string name, const std::string& vertexSrc, const std::string& fragmentSrc)
+		: m_Name(name)
 	{
 		std::unordered_map<GLenum, std::string> glShaderSrc;
 		glShaderSrc[GL_VERTEX_SHADER] = vertexSrc;
@@ -155,7 +163,6 @@ namespace Hazel {
 	}
 
 	
-
 	void OpenGLShader::Bind() const
 	{
 		glUseProgram(m_RendererID);
@@ -164,6 +171,31 @@ namespace Hazel {
 	void OpenGLShader::UnBind() const
 	{
 		glUseProgram(0);
+	}
+
+	void OpenGLShader::SetInt(const std::string& name, int value)
+	{
+		UploadUniformInt(name, value);
+	}
+
+	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value)
+	{
+		UploadUniformFloat3(name, value);
+	}
+
+	void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& value)
+	{
+		UploadUniformFloat4(name, value);
+	}
+
+	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& value)
+	{
+		UploadUniformMat4(name, value);
+	}
+
+	std::string OpenGLShader::GetName() const
+	{
+		return m_Name;
 	}
 
 	void OpenGLShader::UploadUniformInt(const std::string& name, int value)
