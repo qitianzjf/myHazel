@@ -14,7 +14,6 @@ namespace Hazel {
 
 		virtual void OnAttach() override; //layer调用layerstack中的push操作时候会进行初始化操作，会初始化imguilayer的所有窗口属性
 		virtual void OnDetach() override;//layer被移除的时候会进行消除上下文等操作
-		virtual void OnImGuiRender() override;
 
 		void Begin();//
 		void End();//

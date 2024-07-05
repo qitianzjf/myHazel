@@ -29,10 +29,10 @@ namespace Hazel {
 		std::string Name;
 		ShaderDataType Type;
 		uint32_t Size;
-		uint32_t Offset;
+		size_t Offset; //size_t 是 sizeof 操作符的结果的无符号整数类型
 		bool Normalized;
 
-		BufferElement() {}
+		BufferElement() = default;
 		BufferElement(ShaderDataType type, const std::string& name, bool normalized = false)
 			:Name(name), Type(type), Size(ShaderDataTypeSize(type)), Offset(0), Normalized(normalized) {}
 
